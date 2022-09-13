@@ -20,7 +20,8 @@
     "passport": "^0.6.0",
     "passport-spotify": "^2.0.0",
     "redis": "3.0.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -31,6 +32,7 @@
     "@types/node": "^18.7.16",
     "@types/passport": "^1.0.10",
     "@types/passport-spotify": "^2.0.1",
+    "@types/request": "^2.48.8",
     "typescript": "^4.8.3"
   }
 }

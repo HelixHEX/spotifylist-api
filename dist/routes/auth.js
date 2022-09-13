@@ -4,31 +4,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const passport_1 = __importDefault(require("passport"));
+const request_1 = __importDefault(require("request"));
 const router = express_1.default.Router();
-router.get("/spotify", passport_1.default.authenticate("spotify", {
-    scope: ["user-read-email", "user-read-private"],
-}));
-router.get("/spotify/callback", passport_1.default.authenticate("spotify", {
-    failureRedirect: "/auth/failed",
-    successRedirect: process.env.CLIENT_URL,
-}));
-router.get("/success", (req, res) => {
-    if (req.user) {
-        res.status(200).json({ success: true, user: req.user });
-    }
-});
-router.get("/failed", (_, res) => {
-    res.status(401).json({ success: false, message: "failure" });
-});
-router.get('/logout', (req, res, next) => {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
+router.get("/callback", (req, res) => {
+    var code = req.query.code || null;
+    var authOptions = {
+        url: "https://accounts.spotify.com/api/token",
+        form: {
+            code: code,
+            redirect_uri: `${process.env.API_URL}/auth/callback`,
+            grant_type: "authorization_code",
+        },
+        headers: {
+            Authorization: "Basic " +
+                Buffer.from(process.env.SPOTIFY_CLIENT_ID +
+                    ":" +
+                    process.env.SPOTIFY_CLIENT_SECRET).toString("base64"),
+        },
+        json: true,
+    };
+    request_1.default.post(authOptions, (error, response, body) => {
+        if (!error && response.statusCode === 200) {
+            var access_token = body.access_token, refresh_token = body.refresh_token;
+            res.cookie("access_token", access_token);
+            res.redirect(process.env.CLIENT_URL +
+                "/#" +
+                new URLSearchParams({
+                    access_token: access_token,
+                    refresh_token: refresh_token,
+                }).toString());
         }
-        res.redirect(process.env.CLIENT_URL);
+        else {
+            res.redirect("/#" +
+                new URLSearchParams({
+                    error: "invalid_token",
+                }).toString());
+        }
     });
-    res.redirect(process.env.CLIENT_URL);
 });
 exports.default = router;
 //# sourceMappingURL=auth.js.map

@@ -1,38 +1,53 @@
 import express from "express";
-import passport from "passport";
+import request from "request";
+
 const router = express.Router();
 
-router.get(
-  "/spotify",
-  passport.authenticate("spotify", {
-    scope: ["user-read-email", "user-read-private"],
-  })
-);
+router.get("/callback", (req: express.Request, res: express.Response) => {
+  var code = req.query.code || null;
 
-router.get(
-  "/spotify/callback",
-  passport.authenticate("spotify", {
-    failureRedirect: "/auth/failed",
-    successRedirect: process.env.CLIENT_URL,
-  })
-);
+  var authOptions = {
+    url: "https://accounts.spotify.com/api/token",
+    form: {
+      code: code,
+      redirect_uri: `${process.env.API_URL}/auth/callback`,
+      grant_type: "authorization_code",
+    },
+    headers: {
+      Authorization:
+        "Basic " +
+        Buffer.from(
+          process.env.SPOTIFY_CLIENT_ID +
+            ":" +
+            process.env.SPOTIFY_CLIENT_SECRET
+        ).toString("base64"),
+    },
+    json: true,
+  };
 
-router.get("/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({ success: true, user: req.user });
-  }
-});
+  request.post(authOptions, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      var access_token = body.access_token,
+        refresh_token = body.refresh_token;
 
-router.get("/failed", (_, res) => {
-  res.status(401).json({ success: false, message: "failure" });
-});
-
-router.get('/logout', (req, res, next) => {
-  req.logout(function(err) {
-    if (err) { return next(err); } 
-    res.redirect(process.env.CLIENT_URL as string);
+      // we can also pass the token to the browser to make requests from there
+      res.cookie("access_token", access_token);
+      res.redirect(
+        process.env.CLIENT_URL +
+          "/#" +
+          new URLSearchParams({
+            access_token: access_token,
+            refresh_token: refresh_token,
+          }).toString()
+      );
+    } else {
+      res.redirect(
+        "/#" +
+          new URLSearchParams({
+            error: "invalid_token",
+          }).toString()
+      );
+    }
   });
-  res.redirect(process.env.CLIENT_URL as string);
-})
-
-export default router
+});
+export default router;
