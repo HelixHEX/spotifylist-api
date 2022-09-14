@@ -12,7 +12,7 @@ router.get('/me', (req: express.Request, res: express.Response) => {
       json: true,
     };
   
-    request.get(options, (error, response, body) => {
+    request.get(options, (error, _response, body) => {
       if (error) {
         res.status(500).json({ error: "An error has occurred" });
       } else if (body.error) {
@@ -57,7 +57,7 @@ router.get('/top-artists', (req: express.Request, res: express.Response) => {
       json: true,
     };
     
-    request.get(options, (error, response, body) => {
+    request.get(options, (error, _response, body) => {
       
       if (error) {
         res.status(500).json({ error: "An error has occurred" });

@@ -14,7 +14,7 @@ router.get('/me', (req, res) => {
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
-        request_1.default.get(options, (error, response, body) => {
+        request_1.default.get(options, (error, _response, body) => {
             if (error) {
                 res.status(500).json({ error: "An error has occurred" });
             }
@@ -59,7 +59,7 @@ router.get('/top-artists', (req, res) => {
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
-        request_1.default.get(options, (error, response, body) => {
+        request_1.default.get(options, (error, _response, body) => {
             if (error) {
                 res.status(500).json({ error: "An error has occurred" });
             }
