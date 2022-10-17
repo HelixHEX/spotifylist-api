@@ -29,6 +29,10 @@ const main = () => {
   app.use("/auth", auth);
   app.use('/user', user)
 
+  app.get("/", (_, res: express.Response) => {
+    res.send("Hello world");
+  });
+
   app.use((_, res: express.Response) => {
     res.status(404).json({ status: "404" });
   });
