@@ -26,6 +26,7 @@ router.get("/callback", (req, res) => {
     request_1.default.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             var access_token = body.access_token, refresh_token = body.refresh_token;
+            console.log(process.env.NODE_ENV);
             res.cookie("access_token", access_token, {
                 domain: process.env.NODE_ENV === "production"
                     ? 'listr.eliaswambugu.com'

@@ -7,5 +7,6 @@ declare namespace NodeJS {
     CLIENT_URL: string;
     SESSION_SECRET: string;
     STATE_KEY: string;
+    NODE_ENV: string;
   }
 }
