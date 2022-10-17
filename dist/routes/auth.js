@@ -31,7 +31,7 @@ router.get("/callback", (req, res) => {
                     ? 'listr.eliaswambugu.com'
                     : "localhost",
             });
-            res.redirect(process.env.CLIENT_URL +
+            res.redirect('http://' + process.env.CLIENT_URL +
                 "/#" +
                 new URLSearchParams({
                     access_token: access_token,

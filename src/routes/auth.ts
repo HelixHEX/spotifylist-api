@@ -38,7 +38,7 @@ router.get("/callback", (req: express.Request, res: express.Response) => {
             : "localhost",
       });
       res.redirect(
-        process.env.CLIENT_URL +
+        'http://' + process.env.CLIENT_URL +
           "/#" +
           new URLSearchParams({
             access_token: access_token,
