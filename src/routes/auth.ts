@@ -34,7 +34,7 @@ router.get("/callback", (req: express.Request, res: express.Response) => {
       res.cookie("access_token", access_token, {
         domain:
           process.env.NODE_ENV === "production"
-            ? process.env.CLIENT_URL
+            ? 'listr.eliaswambugu.com'
             : "localhost",
       });
       res.redirect(
