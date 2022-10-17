@@ -26,7 +26,11 @@ router.get("/callback", (req, res) => {
     request_1.default.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
             var access_token = body.access_token, refresh_token = body.refresh_token;
-            res.cookie("access_token", access_token);
+            res.cookie("access_token", access_token, {
+                domain: process.env.NODE_ENV === "production"
+                    ? process.env.CLIENT_URL
+                    : "localhost",
+            });
             res.redirect(process.env.CLIENT_URL +
                 "/#" +
                 new URLSearchParams({
