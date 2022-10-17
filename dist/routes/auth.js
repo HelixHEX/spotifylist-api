@@ -29,15 +29,18 @@ router.get("/callback", (req, res) => {
             console.log(process.env.NODE_ENV);
             res.cookie("access_token", access_token, {
                 domain: process.env.NODE_ENV === "production"
-                    ? 'listr.eliaswambugu.com'
+                    ? ".listr.eliaswambugu.com"
                     : "localhost",
             });
-            res.redirect('http://' + process.env.CLIENT_URL +
-                "/#" +
-                new URLSearchParams({
-                    access_token: access_token,
-                    refresh_token: refresh_token,
-                }).toString());
+            res.redirect(process.env.NODE_ENV === "production"
+                ? "https://"
+                : "http://" +
+                    process.env.CLIENT_URL +
+                    "/#" +
+                    new URLSearchParams({
+                        access_token: access_token,
+                        refresh_token: refresh_token,
+                    }).toString());
         }
         else {
             res.redirect("/#" +
