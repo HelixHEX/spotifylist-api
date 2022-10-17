@@ -27,9 +27,7 @@ router.get("/callback", (req, res) => {
         if (!error && response.statusCode === 200) {
             var access_token = body.access_token, refresh_token = body.refresh_token;
             res.cookie("access_token", access_token, {
-                domain: process.env.NODE_ENV === "production"
-                    ? ".spotlist.eliaswambugu.com"
-                    : "localhost",
+                domain: process.env.COOKIE_DOMAIN,
             });
             res.redirect(process.env.CLIENT_URL +
                 "/#" +

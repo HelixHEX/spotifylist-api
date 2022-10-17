@@ -8,5 +8,6 @@ declare namespace NodeJS {
     SESSION_SECRET: string;
     STATE_KEY: string;
     NODE_ENV: string;
+    COOKIE_DOMAIN: string;
   }
 }

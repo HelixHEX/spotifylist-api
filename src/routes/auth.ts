@@ -31,10 +31,7 @@ router.get("/callback", (req: express.Request, res: express.Response) => {
         refresh_token = body.refresh_token;
       // we can also pass the token to the browser to make requests from there
       res.cookie("access_token", access_token, {
-        domain:
-          process.env.NODE_ENV === "production"
-            ? ".spotlist.eliaswambugu.com"
-            : "localhost",
+        domain: process.env.COOKIE_DOMAIN,
       });
       res.redirect(
         process.env.CLIENT_URL +
