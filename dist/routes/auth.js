@@ -32,15 +32,12 @@ router.get("/callback", (req, res) => {
                     ? ".listr.eliaswambugu.com"
                     : "localhost",
             });
-            res.redirect(process.env.NODE_ENV === "production"
-                ? "https://"
-                : "http://" +
-                    process.env.CLIENT_URL +
-                    "/#" +
-                    new URLSearchParams({
-                        access_token: access_token,
-                        refresh_token: refresh_token,
-                    }).toString());
+            res.redirect(process.env.CLIENT_URL +
+                "/#" +
+                new URLSearchParams({
+                    access_token: access_token,
+                    refresh_token: refresh_token,
+                }).toString());
         }
         else {
             res.redirect("/#" +

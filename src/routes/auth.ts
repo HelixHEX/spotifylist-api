@@ -38,15 +38,12 @@ router.get("/callback", (req: express.Request, res: express.Response) => {
             : "localhost",
       });
       res.redirect(
-        process.env.NODE_ENV === "production"
-          ? "https://"
-          : "http://" +
-              process.env.CLIENT_URL +
-              "/#" +
-              new URLSearchParams({
-                access_token: access_token,
-                refresh_token: refresh_token,
-              }).toString()
+        process.env.CLIENT_URL +
+          "/#" +
+          new URLSearchParams({
+            access_token: access_token,
+            refresh_token: refresh_token,
+          }).toString()
       );
     } else {
       res.redirect(
