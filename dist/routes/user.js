@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const request_1 = __importDefault(require("request"));
 const router = express_1.default.Router();
-router.get('/me', (req, res) => {
+router.get("/me", (req, res) => {
     const access_token = req.query.access_token || null;
-    if (access_token || access_token !== 'undefined') {
+    if (access_token || access_token !== "undefined") {
         var options = {
             url: "https://api.spotify.com/v1/me",
             headers: { Authorization: "Bearer " + access_token },
@@ -30,11 +30,33 @@ router.get('/me', (req, res) => {
         res.status(401).json({ message: "Not logged in" });
     }
 });
-router.get('/top-tracks', (req, res) => {
+router.get("/tracks", (req, res) => {
     const access_token = req.query.access_token || null;
-    if (access_token || access_token !== 'undefined') {
+    if (access_token || access_token !== "undefined") {
         var options = {
-            url: "https://api.spotify.com/v1/me/top/tracks",
+            url: "https://api.spotify.com/v1/me/top/tracks?limit=5",
+            headers: { Authorization: "Bearer " + access_token },
+            json: true,
+        };
+        request_1.default.get(options, (error, _response, body) => {
+            if (error) {
+                console.log(error);
+                res.status(500).json({ error: "An error has occurred" });
+            }
+            else {
+                res.status(200).json(body);
+            }
+        });
+    }
+    else {
+        res.status(401).json({ message: "Not logged in" });
+    }
+});
+router.get("/artists", (req, res) => {
+    const access_token = req.query.access_token || null;
+    if (access_token || access_token !== "undefined") {
+        var options = {
+            url: "https://api.spotify.com/v1/me/top/artists",
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
@@ -51,16 +73,17 @@ router.get('/top-tracks', (req, res) => {
         res.status(401).json({ message: "Not logged in" });
     }
 });
-router.get('/top-artists', (req, res) => {
+router.get("/top-genres", (req, res) => {
     const access_token = req.query.access_token || null;
-    if (access_token || access_token !== 'undefined') {
+    if (access_token || access_token !== "undefined") {
         var options = {
-            url: "https://api.spotify.com/v1/me/top/artists",
+            url: "https://api.spotify.com/v1/recommendations/available-genre-seeds",
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
         request_1.default.get(options, (error, _response, body) => {
             if (error) {
+                console.log(error);
                 res.status(500).json({ error: "An error has occurred" });
             }
             else {
