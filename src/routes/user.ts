@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/me", (req: express.Request, res: express.Response) => {
   const access_token = req.query.access_token || null;
+
   if (access_token || access_token !== "undefined") {
     var options = {
       url: "https://api.spotify.com/v1/me",
@@ -29,9 +30,11 @@ router.get("/me", (req: express.Request, res: express.Response) => {
 //get top tracks
 router.get("/tracks", (req: express.Request, res: express.Response) => {
   const access_token = req.query.access_token || null;
+  const time_range = req.query.time_range || "short_term";
+
   if (access_token || access_token !== "undefined") {
     var options = {
-      url: "https://api.spotify.com/v1/me/top/tracks?limit=5",
+      url: `https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=${time_range}`,
       headers: { Authorization: "Bearer " + access_token },
       json: true,
     };
@@ -41,7 +44,8 @@ router.get("/tracks", (req: express.Request, res: express.Response) => {
         console.log(error);
         res.status(500).json({ error: "An error has occurred" });
       } else {
-        res.status(200).json(body);
+        const data = body.items;
+        res.status(200).json(data);
       }
     });
   } else {
@@ -51,9 +55,11 @@ router.get("/tracks", (req: express.Request, res: express.Response) => {
 
 router.get("/artists", (req: express.Request, res: express.Response) => {
   const access_token = req.query.access_token || null;
+  const time_range = req.query.time_range || "short_term";
+
   if (access_token || access_token !== "undefined") {
     var options = {
-      url: "https://api.spotify.com/v1/me/top/artists",
+      url: `https://api.spotify.com/v1/me/top/artists?limit=5&time_range=${time_range}`,
       headers: { Authorization: "Bearer " + access_token },
       json: true,
     };
@@ -62,7 +68,8 @@ router.get("/artists", (req: express.Request, res: express.Response) => {
       if (error) {
         res.status(500).json({ error: "An error has occurred" });
       } else {
-        res.status(200).json(body);
+        const data = body.items;
+        res.status(200).json(data);
       }
     });
   } else {
@@ -72,6 +79,7 @@ router.get("/artists", (req: express.Request, res: express.Response) => {
 
 router.get("/top-genres", (req: express.Request, res: express.Response) => {
   const access_token = req.query.access_token || null;
+
   if (access_token || access_token !== "undefined") {
     var options = {
       url: "https://api.spotify.com/v1/recommendations/available-genre-seeds",

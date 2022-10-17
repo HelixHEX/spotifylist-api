@@ -32,9 +32,10 @@ router.get("/me", (req, res) => {
 });
 router.get("/tracks", (req, res) => {
     const access_token = req.query.access_token || null;
+    const time_range = req.query.time_range || "short_term";
     if (access_token || access_token !== "undefined") {
         var options = {
-            url: "https://api.spotify.com/v1/me/top/tracks?limit=5",
+            url: `https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=${time_range}`,
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
@@ -44,7 +45,8 @@ router.get("/tracks", (req, res) => {
                 res.status(500).json({ error: "An error has occurred" });
             }
             else {
-                res.status(200).json(body);
+                const data = body.items;
+                res.status(200).json(data);
             }
         });
     }
@@ -54,9 +56,10 @@ router.get("/tracks", (req, res) => {
 });
 router.get("/artists", (req, res) => {
     const access_token = req.query.access_token || null;
+    const time_range = req.query.time_range || "short_term";
     if (access_token || access_token !== "undefined") {
         var options = {
-            url: "https://api.spotify.com/v1/me/top/artists",
+            url: `https://api.spotify.com/v1/me/top/artists?limit=5&time_range=${time_range}`,
             headers: { Authorization: "Bearer " + access_token },
             json: true,
         };
@@ -65,7 +68,8 @@ router.get("/artists", (req, res) => {
                 res.status(500).json({ error: "An error has occurred" });
             }
             else {
-                res.status(200).json(body);
+                const data = body.items;
+                res.status(200).json(data);
             }
         });
     }
