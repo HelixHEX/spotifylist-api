@@ -20,6 +20,9 @@ const main = () => {
     app.use(express_1.default.json());
     app.use("/auth", auth_1.default);
     app.use('/user', user_1.default);
+    app.get("/", (_, res) => {
+        res.send("Hello world");
+    });
     app.use((_, res) => {
         res.status(404).json({ status: "404" });
     });
